@@ -24,33 +24,29 @@ class EquityCurveChart extends StatelessWidget {
       children: [
         IntrinsicHeight(
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('\$${(maxV / 1000).toStringAsFixed(0)}K',
-                      style: AppTypography.caption),
-                  const Spacer(),
-                  Text('\$${((maxV + minV) / 2 / 1000).toStringAsFixed(0)}K',
-                      style: AppTypography.caption),
-                  const Spacer(),
-                  Text('\$${(minV / 1000).toStringAsFixed(0)}K',
-                      style: AppTypography.caption),
-                ],
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: SizedBox(
-                  height: 160,
-                  child: CustomPaint(
-                    painter:
-                        _EquityCurvePainter(data: data, lineColor: lineColor),
-                    child: Container(),
-                  ),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('\$${(maxV / 1000).toStringAsFixed(0)}K', style: AppTypography.caption),
+                const Spacer(),
+                Text('\$${((maxV + minV) / 2 / 1000).toStringAsFixed(0)}K', style: AppTypography.caption),
+                const Spacer(),
+                Text('\$${(minV / 1000).toStringAsFixed(0)}K', style: AppTypography.caption),
+              ],
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: SizedBox(
+                height: 160,
+                child: CustomPaint(
+                  painter: _EquityCurvePainter(data: data, lineColor: lineColor),
+                  child: Container(),
                 ),
               ),
-            ],
+            ),
+          ],
           ),
         ),
         const SizedBox(height: 6),
@@ -58,9 +54,7 @@ class EquityCurveChart extends StatelessWidget {
           padding: const EdgeInsets.only(left: 34),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: dateLabels
-                .map((d) => Text(d, style: AppTypography.caption))
-                .toList(),
+            children: dateLabels.map((d) => Text(d, style: AppTypography.caption)).toList(),
           ),
         ),
       ],
@@ -127,16 +121,12 @@ class _EquityCurvePainter extends CustomPainter {
 
     // End-point dot
     canvas.drawCircle(points.last, 4, Paint()..color = lineColor);
-    canvas.drawCircle(
-        points.last,
-        4,
-        Paint()
-          ..color = lineColor.withOpacity(0.3)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 6);
+    canvas.drawCircle(points.last, 4, Paint()
+      ..color = lineColor.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6);
   }
 
   @override
-  bool shouldRepaint(covariant _EquityCurvePainter oldDelegate) =>
-      oldDelegate.data != data;
+  bool shouldRepaint(covariant _EquityCurvePainter oldDelegate) => oldDelegate.data != data;
 }

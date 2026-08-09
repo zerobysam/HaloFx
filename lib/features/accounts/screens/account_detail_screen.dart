@@ -4,6 +4,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/circular_gauge.dart';
 import '../../../core/widgets/equity_curve_chart.dart';
 import '../../calculators/screens/risk_calculator_screen.dart';
+import '../../journal_trades/screens/journal_dashboard_screen.dart';
 import '../models/trading_account.dart';
 
 class AccountDetailScreen extends StatefulWidget {
@@ -310,7 +311,9 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
             Expanded(
               flex: 2,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const JournalDashboardScreen()),
+                ),
                 icon: const Icon(Icons.add_rounded, color: Colors.white, size: 18),
                 label: Text('Add Trade', style: AppTypography.buttonText.copyWith(fontSize: 14)),
                 style: ElevatedButton.styleFrom(
