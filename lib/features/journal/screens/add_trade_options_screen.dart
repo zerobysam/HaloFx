@@ -26,19 +26,20 @@ class AddTradeOptionsScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.close_rounded, color: AppColors.textPrimary, size: 22),
+                    icon: const Icon(Icons.close_rounded,
+                        color: AppColors.textPrimary, size: 22),
                   ),
                   Text('Add Trade', style: AppTypography.headlineSmall),
                 ],
               ),
               const SizedBox(height: 12),
-
               _optionCard(
                 icon: Icons.camera_alt_rounded,
                 iconColor: AppColors.primaryLight,
                 title: 'AI Import (Screenshot)',
                 subtitle: 'Upload screenshot and AI will extract the trade',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => AiImportReviewScreen(account: account))),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => AiImportReviewScreen(account: account))),
               ),
               const SizedBox(height: 12),
               _optionCard(
@@ -46,7 +47,8 @@ class AddTradeOptionsScreen extends StatelessWidget {
                 iconColor: AppColors.success,
                 title: 'Import CSV',
                 subtitle: 'Import from MT4, MT5, cTrader, Binance, Bybit',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => CsvImportScreen(account: account))),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => CsvImportScreen(account: account))),
               ),
               const SizedBox(height: 12),
               _optionCard(
@@ -54,7 +56,8 @@ class AddTradeOptionsScreen extends StatelessWidget {
                 iconColor: const Color(0xFFF59E0B),
                 title: 'Manual Entry',
                 subtitle: 'Enter trade details manually',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ManualEntryScreen(account: account))),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ManualEntryScreen(account: account))),
               ),
               const SizedBox(height: 12),
               _optionCard(
@@ -66,7 +69,6 @@ class AddTradeOptionsScreen extends StatelessWidget {
                 disabled: true,
                 onTap: () {},
               ),
-
               const SizedBox(height: 20),
               Center(
                 child: Text(
@@ -95,13 +97,21 @@ class AddTradeOptionsScreen extends StatelessWidget {
       onTap: disabled ? null : onTap,
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: AppColors.bgElevated, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
+        decoration: BoxDecoration(
+            color: AppColors.bgElevated,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.border)),
         child: Row(
           children: [
             Container(
-              width: 44, height: 44,
-              decoration: BoxDecoration(color: iconColor.withOpacity(0.15), borderRadius: BorderRadius.circular(12)),
-              child: Icon(icon, color: disabled ? AppColors.textTertiary : iconColor, size: 22),
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12)),
+              child: Icon(icon,
+                  color: disabled ? AppColors.textTertiary : iconColor,
+                  size: 22),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -110,23 +120,39 @@ class AddTradeOptionsScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(title, style: AppTypography.bodyLarge.copyWith(fontSize: 15, fontWeight: FontWeight.w700, color: disabled ? AppColors.textSecondary : AppColors.textPrimary)),
+                      Text(title,
+                          style: AppTypography.bodyLarge.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: disabled
+                                  ? AppColors.textSecondary
+                                  : AppColors.textPrimary)),
                       if (badge != null) ...[
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(4)),
-                          child: Text(badge, style: AppTypography.caption.copyWith(color: AppColors.bgPrimary, fontWeight: FontWeight.w800, fontSize: 9)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                              color: AppColors.gold,
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Text(badge,
+                              style: AppTypography.caption.copyWith(
+                                  color: AppColors.bgPrimary,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 9)),
                         ),
                       ],
                     ],
                   ),
                   const SizedBox(height: 3),
-                  Text(subtitle, style: AppTypography.bodySmall.copyWith(fontSize: 12.5)),
+                  Text(subtitle,
+                      style: AppTypography.bodySmall.copyWith(fontSize: 12.5)),
                 ],
               ),
             ),
-            if (!disabled) const Icon(Icons.chevron_right_rounded, color: AppColors.textTertiary),
+            if (!disabled)
+              const Icon(Icons.chevron_right_rounded,
+                  color: AppColors.textTertiary),
           ],
         ),
       ),

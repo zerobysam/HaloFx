@@ -85,3 +85,6 @@ a new placeholder.
 Mock account data now lives in `core/state/accounts_store.dart`
 (`AccountsStore`, `ValueNotifier`-based like `AuthStatus`) — 3 accounts
 matching the mockup (FTMO Challenge, Personal Account, FundedNext Eval).
+
+
+flutter run -d 45975A20-D0B1-44D8-A1FD-940B550C5C51

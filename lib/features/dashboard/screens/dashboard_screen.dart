@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:halofx/core/widgets/halo_dashboard_cards.dart';
+import 'package:halofx/features/dashboard/widgets/calculator_search_field.dart';
+import 'package:halofx/features/dashboard/widgets/continue_calculator_card.dart';
+import 'package:halofx/features/dashboard/widgets/dashboard_header.dart';
+import 'package:halofx/features/dashboard/widgets/halofx_bottom_nav.dart';
+import 'package:halofx/features/dashboard/widgets/planner_preview_card.dart';
+import 'package:halofx/features/dashboard/widgets/session_status_card.dart';
 import '../../../core/state/auth_status.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
@@ -11,8 +18,30 @@ import '../../calculators/screens/currency_converter_screen.dart';
 import '../../calculators/screens/futures_calculator_screen.dart';
 import '../../calculators/screens/position_size_screen.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final _searchController = TextEditingController();
+  // const DashboardScreen({super.key});
+
+  int _selectedIndex = 0;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
 
   static const _quickActions = [
     (icon: Icons.straighten_rounded, label: 'Position Size'),
@@ -35,136 +64,109 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
+
       body: SafeArea(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: AuthStatus.isLoggedIn,
-          builder: (context, isLoggedIn, _) {
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      isLoggedIn ? 'Good morning 👋' : 'Welcome',
-                      style: AppTypography.headlineMedium.copyWith(fontSize: 22),
+        bottom: false,
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    // 1. Dashboard Header
+                    DashboardHeader(
+                      onNotificationsTap: () {
+                        _showMessage('Notifications coming soon.');
+                      },
                     ),
-                    const Icon(Icons.notifications_none_rounded, color: AppColors.textSecondary, size: 24),
+
+                    const SizedBox(height: 20),
+
+                    // 2. Calculator Search
+                    CalculatorSearchField(
+                      controller: _searchController,
+                      onChanged: (value) {},
+                      onFilterTap: () {
+                        _showMessage('Calculator filters coming soon.');
+                      },
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // 3. Market Sessions
+                    MarketSessionsCard(
+                      now: DateTime.now().toUtc(),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 4. Active Session
+                    const SessionStatusCard(),
+
+                    const SizedBox(height: 20),
+
+                    // 5. Next Planner
+                    PlannerPreviewCard(
+                      onTap: () {
+                        _showMessage('Opening planner...');
+                      },
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // 6. Continue Last Calculator
+                    ContinueCalculatorCard(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PositionSizeScreen(),
+                          ),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
-                const SizedBox(height: 16),
-
-                if (isLoggedIn)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: AppColors.bgElevated,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Total Balance (All Accounts)', style: AppTypography.bodySmall.copyWith(fontSize: 12)),
-                        const SizedBox(height: 6),
-                        Text('\$142,430.50', style: AppTypography.numberLarge),
-                        const SizedBox(height: 4),
-                        Text('+2.45% today', style: AppTypography.bodySmall.copyWith(color: AppColors.success, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                  )
-                else
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: AppColors.bgElevated,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Calculate instantly. Create account anytime.',
-                            style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 4),
-                        Text('All calculators and converters are free to use without an account.',
-                            style: AppTypography.bodySmall.copyWith(fontSize: 12.5)),
-                      ],
-                    ),
-                  ),
-
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Quick Actions', style: AppTypography.headlineSmall.copyWith(fontSize: 16)),
-                    GestureDetector(
-                      onTap: () => navigateToTab(context, 2, 0),
-                      child: Text('See All', style: AppTypography.linkMedium.copyWith(fontSize: 13)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _quickActions.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemBuilder: (context, i) {
-                    final action = _quickActions[i];
-                    return GestureDetector(
-                      onTap: () => _openQuickAction(context, i),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColors.bgElevated,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(action.icon, color: AppColors.primaryLight, size: 22),
-                            const SizedBox(height: 8),
-                            Text(
-                              action.label,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: AppTypography.caption.copyWith(fontSize: 10.5, color: AppColors.textSecondary),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-                if (!isLoggedIn) ...[
-                  const SizedBox(height: 16),
-                  GuestUpsellBanner(
-                    onCreateAccount: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SignupScreen()),
-                    ),
-                    onLogIn: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    ),
-                  ),
-                ],
-              ],
-            );
-          },
+              ),
+            ),
+          ],
         ),
       ),
-      bottomNavigationBar: AppBottomNavBar(
-        currentIndex: 0,
-        onTap: (i) => navigateToTab(context, i, 0),
+
+      // bottomNavigationBar: AppBottomNavBar(
+      //   currentIndex: 0,
+      //   onTap: (i) => navigateToTab(context, i, 0),
+      // ),
+
+      // 7. Bottom Navigation
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: HaloFxBottomNav(
+          selectedIndex: _selectedIndex,
+          onSelected: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+
+            if (index != 0) {
+              navigateToTab(context, index, 0);
+              // _showMessage(
+              //   '${_navName(index)} coming soon.',
+              // );
+
+              setState(() {
+                _selectedIndex = 0;
+              });
+            }
+          },
+          onQuickAction: () {
+            _showMessage('Quick actions coming soon.');
+          },
+        ),
       ),
     );
   }
